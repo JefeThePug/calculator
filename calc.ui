@@ -57,7 +57,8 @@
       <enum>Qt::RightToLeft</enum>
      </property>
      <property name="styleSheet">
-      <string notr="true">background-color: tan;</string>
+      <string notr="true">background-color: darkgreen;
+color: white;</string>
      </property>
      <property name="smallDecimalPoint">
       <bool>true</bool>
@@ -77,6 +78,11 @@
        <width>498</width>
        <height>80</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>1</pointsize>
+      </font>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -245,6 +251,11 @@ background-color: beige;
        <width>498</width>
        <height>80</height>
       </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>1</pointsize>
+      </font>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -908,6 +919,28 @@ background-color: beige;
        <string>=</string>
       </property>
      </widget>
+    </widget>
+    <widget class="QLabel" name="txt_mem">
+     <property name="geometry">
+      <rect>
+       <x>16</x>
+       <y>16</y>
+       <width>16</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="autoFillBackground">
+      <bool>false</bool>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: 0;</string>
+     </property>
+     <property name="text">
+      <string>M</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
     </widget>
    </widget>
   </widget>
