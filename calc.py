@@ -1,8 +1,8 @@
 import sys
 import math
 import re
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from functools import partial
 
 # COLORS
@@ -92,6 +92,11 @@ class Win(QMainWindow):
             self.eval_str = ""
 
         self.num_str += txt
+
+        if self.num_str.startswith("."):
+            self.num_str = f"0{self.num_str}"
+
+
         if (r := re.match(r"(0{1,2})(\d.*)", self.num_str)) :
             self.num_str = r.group(2)
 
@@ -107,24 +112,26 @@ class Win(QMainWindow):
                 self.eval_str = f"{eval(self.eval_str)}"
                 self.num_str = self.eval_str
             self.eval_str += txt
+            self.num_str = ""
         else:
             self.eval_str = self.eval_str[:-1] + txt
 
         self.finished_num = True
 
-    def totaling(self, txt):
-        if txt == "%":
-            self.num_str = f"{float(self.num_str)/100}"
+    def percent(self):
+        self.num_str = f"{float(self.num_str)/100}"
 
-        if not (
-            (s := self.eval_str + self.num_str).count(".") <= 1
-            and not re.findall(r"[-+*/]", s)
-        ):
-            self.eval_str = s
+    def totaling(self, txt):
+        if re.findall(r"[-+*/]", self.eval_str):
+            self.eval_str += self.num_str
+        
         try:
             n = eval(self.eval_str)
         except ZeroDivisionError:
             n = "E"
+        except Exception as e:
+            print(f"{e}\n{self.eval_str=}   {self.num_str=}")
+            return
         self.eval_str = f"{n}"
         self.num_str = f"{n}"
         self.finished_num = True
@@ -135,7 +142,9 @@ class Win(QMainWindow):
             self.append_to_number(txt)
         elif txt in "+-×÷":
             self.add_operator(txt)
-        elif txt in "=%":
+        elif txt == "%":
+            self.percent()
+        elif txt == "=":
             self.totaling(txt)
         elif txt == "√":
             self.sq_push = True
@@ -143,7 +152,6 @@ class Win(QMainWindow):
                 self.num_str = "E"
             else:
                 self.num_str = f"{math.sqrt(float(self.num_str))}"
-                # self.finished_num = True
         elif txt == "±":
             n = float(self.num_str) if "." in self.num_str else int(self.num_str)
             self.num_str = f"{-n}"
@@ -165,7 +173,7 @@ class Win(QMainWindow):
         if "E" not in self.num_str or txt == "AC":
             self.check_clicked(txt)
             if "E" in self.num_str:
-                self.lcd_out.display("ERROR")
+                self.lcd.display("ERROR")
                 return
             self.lcd.display(float(self.num_str) if self.num_str else "0")
         else:
@@ -176,4 +184,4 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = Win()
     MainWindow.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
